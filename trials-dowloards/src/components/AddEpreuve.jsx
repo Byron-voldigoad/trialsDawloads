@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import './AddEpreuve.css'; // Assurez-vous que le chemin est correct
+import { useNavigate } from "react-router-dom";
 
 const AddEpreuve = () => {
   const [nomEpreuve, setNomEpreuve] = useState("");
@@ -13,6 +14,8 @@ const AddEpreuve = () => {
   const [filieres, setFilieres] = useState([]);
   const [specialites, setSpecialites] = useState([]);
   const [isCorrection, setIsCorrection] = useState(false);  // État pour la checkbox de correction
+
+  const navigate = useNavigate(); // Déclaration de navigate
 
   // Fonction pour récupérer les données de la base de données
   const fetchData = async () => {
@@ -62,6 +65,13 @@ const AddEpreuve = () => {
       });
       setMessage("Epreuve ajoutée avec succès !");
       setMessageType("success"); // Type succès
+
+      // Redirection après 3 secondes
+      console.log("Redirection DANS 3 secondes...");
+      setTimeout(() => {
+        console.log("Redirection après 3 secondes...");
+        window.location.href = '/'; // Remplace "/" par l'URL vers laquelle tu veux rediriger
+      }, 3000);
     } catch (error) {
       if (error.response && error.response.status === 400) {
         setMessage(error.response.data.message);  // Message d'erreur venant du backend

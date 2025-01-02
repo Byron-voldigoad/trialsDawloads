@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const multer = require("multer");
 const path = require("path");
+const fs = require('fs');
+
 
 const app = express();
 const port = 5000;
@@ -15,7 +17,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname); // Utilise le nom original du fichier
+    cb(null, file.originalname); // Utilise le nom original du fichier
   },
 });
 
@@ -49,7 +51,7 @@ db.connect((err) => {
 // Middleware pour gérer CORS
 app.use(cors({
   origin: 'http://localhost:5173',
-  methods: 'GET, POST',
+   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Inclure DELETE
   allowedHeaders: 'Content-Type, Authorization',
   credentials: true, // Assurez-vous de gérer les cookies et les entêtes
 }));
@@ -80,7 +82,7 @@ app.post('/api/epreuves', upload.single('file'), (req, res) => {
     }
 
     // Si le fichier n'existe pas, procéder à l'ajout
-    const insertQuery = 'INSERT INTO epreuves (nom_epreuves, matiere_id, annee_id, correction, file_name) VALUES (?, ?, ?, ?, ?)';
+    const insertQuery = 'INSERT INTO epreuves (nom_epreuves, matiere_id, annee, correction, file_name) VALUES (?, ?, ?, ?, ?)';
     const values = [nom_epreuves, matiere_id, annee, is_correction, fileName];
 
     db.query(insertQuery, values, (err, results) => {
@@ -130,6 +132,76 @@ app.get('/api/epreuves', (req, res) => {
     res.json(results);
   });
 });
+
+
+// Suppression d'une épreuve
+app.delete('/api/epreuves/:id', (req, res) => {
+  const { id } = req.params;
+
+  // Supprimer le fichier PDF associé à l'épreuve
+  const selectQuery = 'SELECT file_name FROM epreuves WHERE id_epreuves = ?';
+  
+  db.query(selectQuery, [id], (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération du fichier:", err);
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Epreuve non trouvée" });
+    }
+
+    const fileName = results[0].file_name;
+    
+    // Supprimer l'épreuve de la base de données
+    const deleteQuery = 'DELETE FROM epreuves WHERE id_epreuves = ?';
+
+    db.query(deleteQuery, [id], (err) => {
+      if (err) {
+        console.error("Erreur lors de la suppression de l'épreuve:", err);
+        return res.status(500).json({ error: err.message });
+      }
+
+      // Supprimer le fichier physique du serveur
+      const filePath = path.join(__dirname, "../public", "PDF", fileName);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error("Erreur lors de la suppression du fichier:", err);
+        }
+      });
+
+      res.status(200).json({ message: 'Epreuve supprimée avec succès' });
+    });
+  });
+});
+
+// Modification d'une épreuve
+app.put('/api/epreuves/:id', (req, res) => {
+  const { id } = req.params;
+  const { nom_epreuves, matiere_id, annee } = req.body;
+
+  // Requête pour mettre à jour l'épreuve
+  const updateQuery = `
+    UPDATE epreuves 
+    SET nom_epreuves = ?, matiere_id = ?, annee = ?
+    WHERE id_epreuves = ?
+  `;
+  const values = [nom_epreuves, matiere_id, annee, id];
+console.log(values);
+  db.query(updateQuery, values, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la mise à jour de l'épreuve:", err);
+      return res.status(500).json({ error: err.message });
+    }
+
+    if (results.affectedRows === 0) {
+      return res.status(404).json({ message: 'Epreuve non trouvée' });
+    }
+
+    res.status(200).json({ message: 'Epreuve modifiée avec succès' });
+  });
+});
+
 
 // Lancer le serveur
 app.listen(port, () => {
