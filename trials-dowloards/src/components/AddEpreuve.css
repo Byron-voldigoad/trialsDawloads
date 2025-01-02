@@ -1,0 +1,80 @@
+/* Styles de base pour le formulaire */
+.add-epreuve-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-epreuve-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.add-epreuve-form p {
+  text-align: center;
+  font-weight: bold;
+}
+
+.add-epreuve-form .success-message {
+  color: green;
+}
+
+.add-epreuve-form .error-message {
+  color: red;
+}
+
+.add-epreuve-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-epreuve-form div {
+  margin-bottom: 15px;
+}
+
+.add-epreuve-form label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.add-epreuve-form input,
+.add-epreuve-form select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-epreuve-form input[type="file"] {
+  padding: 5px;
+}
+
+.add-epreuve-form button {
+  padding: 12px;
+  font-size: 18px;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-epreuve-form button:hover {
+  background-color: #45a049;
+}
+
+.add-epreuve-form button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

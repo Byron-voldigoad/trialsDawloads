@@ -1,0 +1,142 @@
+/* Styles généraux */
+.App {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7fc;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background-color: #3c6e71;
+  padding: 20px;
+  color: white;
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Styles des filtres */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 2%;
+  margin-bottom: 20px;
+}
+
+input, select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 180px;
+  max-width: 100%;
+  transition: border 0.3s ease-in-out;
+}
+
+input:focus, select:focus {
+  border-color: #3c6e71;
+  outline: none;
+}
+
+label {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Tableau des épreuves */
+.epreuves-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto; /* Pour que le tableau soit défilable sur les petits écrans */
+  padding: 0 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #3c6e71;
+  color: white;
+  font-weight: bold;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+tr:nth-child(even) td {
+  background-color: #f1f1f1;
+}
+
+tr:hover td {
+  background-color: #e0e0e0; /* Hover sur les lignes */
+}
+
+/* Styles pour les petits écrans */
+@media screen and (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  input, select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .epreuves-table {
+    padding: 0;
+  }
+
+  table {
+    font-size: 14px;
+  }
+}
+
+/* Amélioration des titres et alignements */
+h1 {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+
+
